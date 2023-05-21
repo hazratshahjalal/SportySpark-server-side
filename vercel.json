@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/toys",
+      "methods": [
+        "GET"
+      ],
+      "dest": "index.js"
+    },
+    {
+      "src": "/addToy",
+      "methods": [
+        "POST"
+      ],
+      "dest": "index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "index.js"
+    }
+  ],
+  "env": {
+    "DB_USER": "my-db-user",
+    "DB_PASS": "my-db-password"
+  }
+}
