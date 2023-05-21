@@ -26,12 +26,37 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const toyCollections = client.db('sportySpark').collection('toys');
+
+    app.get('/toys', async (req, res) => {
+      const cursor = toyCollections.find();
+      const result = await cursor.toArray();
+      res.send(result)
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+
+    app.post('/addToy', async (req, res) => {
+      try {
+        const body = req.body;
+        // Store the toy data in the MongoDB collection
+        await toyCollections.insertOne(body);
+        console.log(toyCollections)
+        res.status(201).json({ message: 'Toy added successfully' });
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
